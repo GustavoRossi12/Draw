@@ -1,2 +1,2 @@
 # Draw
-sistema de desenho
+sistema de para criação de artes na web
