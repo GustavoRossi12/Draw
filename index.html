@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Draw Studio — Editor de Desenho</title>
+<meta name="description" content="Editor de desenho profissional com camadas, formas, texto e histórico — instalável e offline.">
+<meta name="theme-color" content="#12141c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Draw Studio">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" class="logo" aria-hidden="true">
+      <path d="M12 20l-7-7 8.2-8.2a1.9 1.9 0 012.7 0l3.3 3.3a1.9 1.9 0 010 2.7L12 20z"/>
+      <path d="M14.5 6.8l3.3 3.3"/>
+      <path d="M7 13l3 3"/>
+    </svg>
+    <span class="brand-name">Draw Studio</span>
+  </div>
+
+  <div class="sep" aria-hidden="true"></div>
+
+  <div class="tb-group">
+    <button class="tb" id="newBtn" title="Novo documento (Ctrl+N)">Novo</button>
+    <button class="tb" id="openBtn" title="Importar imagem como camada">Abrir</button>
+    <button class="tb" id="savePngBtn" title="Salvar PNG (Ctrl+S)">PNG</button>
+    <button class="tb" id="saveJpgBtn" title="Salvar JPG">JPG</button>
+  </div>
+
+  <div class="sep" aria-hidden="true"></div>
+
+  <div class="tb-group">
+    <button class="tb" id="undoBtn" title="Desfazer (Ctrl+Z)"><span class="tb-ico">↶</span><span class="tb-lbl">Desfazer</span></button>
+    <button class="tb" id="redoBtn" title="Refazer (Ctrl+Shift+Z)"><span class="tb-ico">↷</span><span class="tb-lbl">Refazer</span></button>
+  </div>
+
+  <div class="sep" aria-hidden="true"></div>
+
+  <button class="tb" id="gridBtn" title="Mostrar grade (G)">Grade</button>
+
+  <div class="spacer"></div>
+
+  <button class="tb primary" id="installBtn" hidden>Instalar app</button>
+  <button class="tb panel-btn" id="panelBtn" title="Mostrar painel lateral">Painel</button>
+</header>
+
+<main id="workspace">
+
+  <nav id="toolrail" aria-label="Ferramentas">
+    <button class="tool active" data-tool="brush" title="Pincel (B)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15.5 4.5l4 4-9 9-4.5 1 1-4.5z"/>
+        <path d="M17.5 6.5l-3-3"/>
+        <path d="M7 15.5c-1.4 0-2.5 1.1-2.5 2.5 0 1.3-1 2.2-2.5 2.7 2 1.4 4.3 2 6.6 1.6 1.7-.3 2.9-1.5 2.9-3.1 0-1.7-1.7-3.7-4.5-3.7z"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="eraser" title="Borracha (E)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9.5 19.5L4 14a1.8 1.8 0 010-2.6l7.4-7.4a1.8 1.8 0 012.6 0l5.5 5.5a1.8 1.8 0 010 2.6l-7.4 7.4z"/>
+        <path d="M7.5 11.5l5 5"/>
+        <path d="M9.5 19.5H20"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="line" title="Linha (L)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5.5 18.5l13-13"/>
+        <circle cx="5.5" cy="18.5" r="1.7"/>
+        <circle cx="18.5" cy="5.5" r="1.7"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="rect" title="Retângulo (R)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="6.5" width="16" height="11" rx="1.5"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="ellipse" title="Círculo / elipse (O)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <ellipse cx="12" cy="12" rx="8.5" ry="7"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="text" title="Texto (T)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M5 7.5V4.5h14v3"/>
+        <path d="M12 4.5v15"/>
+        <path d="M8.5 19.5h7"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="fill" title="Baldete — preencher (F)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M11.5 3.5l7.5 7.5-7 7a1.7 1.7 0 01-2.4 0l-5.6-5.6a1.7 1.7 0 010-2.4z"/>
+        <path d="M8.5 6.5L4 2"/>
+        <path d="M19.8 15.2c1.4 1.9 1.9 3 1.9 3.8a1.9 1.9 0 11-3.8 0c0-.8.5-1.9 1.9-3.8z"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="eyedropper" title="Conta-gotas (I)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.4 3.6a2.1 2.1 0 00-3 0l-2.1 2.1-1-1L14.8 6.2l4 4 1.5-1.5-1-1 2.1-2.1a2.1 2.1 0 000-3z"/>
+        <path d="M14.6 8.4L5 18l-1 3 3-1 9.6-9.6"/>
+      </svg>
+    </button>
+    <button class="tool" data-tool="pan" title="Mover tela (H ou Espaço)">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 12.5V7a1.5 1.5 0 013 0v4.5"/>
+        <path d="M11 11.5V5.5a1.5 1.5 0 013 0v6"/>
+        <path d="M14 11.5V7a1.5 1.5 0 013 0v7"/>
+        <path d="M17 12.5a1.5 1.5 0 013 0v3a6.5 6.5 0 01-6.5 6.5H12a6 6 0 01-5.2-3L4.6 16a1.6 1.6 0 012.7-1.7L9 16.5"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div id="stage">
+    <div id="docWrap">
+      <div id="layerStack"></div>
+      <canvas id="gridCanvas"></canvas>
+      <canvas id="previewCanvas"></canvas>
+      <textarea id="textEditor" hidden spellcheck="false" placeholder="Digite… (Enter confirma, Esc cancela)"></textarea>
+    </div>
+    <div id="zoomBar">
+      <button id="zoomOut" title="Diminuir zoom (−)">−</button>
+      <span id="zoomLabel">100%</span>
+      <button id="zoomIn" title="Aumentar zoom (+)">+</button>
+      <button id="zoomFit" title="Ajustar à tela (0)">Ajustar</button>
+    </div>
+  </div>
+
+  <aside id="panel">
+    <div class="tabs">
+      <button class="tab active" data-tab="props">Propriedades</button>
+      <button class="tab" data-tab="layers">Camadas</button>
+      <button class="tab" data-tab="history">Histórico</button>
+      <button class="tab-close" id="panelClose" title="Fechar painel">✕</button>
+    </div>
+
+    <section class="tabpage active" id="tab-props">
+
+      <div class="field" data-show="color">
+        <label class="flabel">Cor</label>
+        <div class="color-row">
+          <input type="color" id="colorPicker" value="#000000">
+          <button class="eye-btn" id="screenColorBtn" title="Pegar cor da tela (se suportado)">Cor da tela</button>
+        </div>
+        <div class="palette" id="palette"></div>
+        <label class="flabel sub">Recentes</label>
+        <div class="palette" id="recentPalette"></div>
+      </div>
+
+      <div class="field" data-show="size">
+        <label class="flabel">Tamanho <span class="fval" id="sizeVal">6</span></label>
+        <input type="range" id="size" min="1" max="100" value="6">
+      </div>
+
+      <div class="field" data-show="alpha">
+        <label class="flabel">Opacidade <span class="fval" id="opacityVal">100%</span></label>
+        <input type="range" id="opacity" min="1" max="100" value="100">
+      </div>
+
+      <div class="field" data-show="shape">
+        <label class="flabel">Preenchimento</label>
+        <div class="seg" id="fillModeSeg">
+          <button data-fm="stroke" class="active">Contorno</button>
+          <button data-fm="fill">Preencher</button>
+          <button data-fm="both">Ambos</button>
+        </div>
+      </div>
+
+      <div class="field" data-show="fill">
+        <label class="flabel">Tolerância <span class="fval" id="tolVal">32</span></label>
+        <input type="range" id="tolerance" min="0" max="96" value="32">
+      </div>
+
+      <div class="field" data-show="text">
+        <label class="flabel">Fonte</label>
+        <select id="fontFamily">
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Georgia">Georgia</option>
+          <option value="'Times New Roman'">Times New Roman</option>
+          <option value="'Courier New'">Courier New</option>
+          <option value="'Trebuchet MS'">Trebuchet MS</option>
+          <option value="Impact">Impact</option>
+          <option value="'Comic Sans MS'">Comic Sans MS</option>
+        </select>
+        <div class="row2">
+          <div>
+            <label class="flabel sub">Tamanho <span class="fval" id="fontSizeVal">40</span></label>
+            <input type="range" id="fontSize" min="8" max="200" value="40">
+          </div>
+          <div>
+            <label class="flabel sub">Peso</label>
+            <select id="fontWeight">
+              <option value="normal">Normal</option>
+              <option value="bold" selected>Negrito</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="tabpage" id="tab-layers">
+      <div class="layer-actions">
+        <button id="layerAdd" title="Nova camada">+ Nova</button>
+        <button id="layerDup" title="Duplicar camada">Duplicar</button>
+        <button id="layerDel" title="Excluir camada">Excluir</button>
+        <button id="layerUp" title="Subir camada">↑</button>
+        <button id="layerDown" title="Descer camada">↓</button>
+        <button id="layerMerge" title="Mesclar com a camada abaixo">Mesclar</button>
+      </div>
+      <div class="field">
+        <label class="flabel">Opacidade da camada <span class="fval" id="layerOpacityVal">100%</span></label>
+        <input type="range" id="layerOpacity" min="0" max="100" value="100">
+      </div>
+      <div id="layerList"></div>
+    </section>
+
+    <section class="tabpage" id="tab-history">
+      <p class="hint">Clique em um estado para voltar a ele.</p>
+      <div id="historyList"></div>
+    </section>
+
+  </aside>
+
+</main>
+
+<footer id="statusbar">
+  <span id="stTool">Pincel</span>
+  <span id="stPos">—, —</span>
+  <span id="stZoom">100%</span>
+  <span id="stDoc">— × — px</span>
+  <span id="stLayer">—</span>
+  <span class="grow"></span>
+  <span id="stHint"></span>
+</footer>
+
+<div id="toasts"></div>
+
+<dialog id="newDialog">
+  <h2>Novo documento</h2>
+  <div class="presets" id="ndPresets">
+    <button data-w="1280" data-h="800">1280 × 800</button>
+    <button data-w="1600" data-h="1000">1600 × 1000</button>
+    <button data-w="1920" data-h="1080">Full HD</button>
+    <button data-w="1080" data-h="1080">Quadrado</button>
+    <button data-w="2480" data-h="3508">A4 300dpi</button>
+  </div>
+  <div class="row2">
+    <label>Largura<input type="number" id="ndW" min="32" max="6000" value="1600"></label>
+    <label>Altura<input type="number" id="ndH" min="32" max="6000" value="1000"></label>
+  </div>
+  <label>Fundo
+    <select id="ndBg">
+      <option value="white">Branco</option>
+      <option value="transparent">Transparente</option>
+    </select>
+  </label>
+  <div class="actions">
+    <button id="ndCancel" class="ghost">Cancelar</button>
+    <button id="ndOk" class="primary">Criar</button>
+  </div>
+</dialog>
+
+<input type="file" id="fileInput" accept="image/*" hidden>
+
+<script src="js/core.js"></script>
+<script src="js/layers.js"></script>
+<script src="js/history.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>
