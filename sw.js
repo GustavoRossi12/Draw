@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'drawstudio-v1';
+const CACHE = 'drawstudio-v3';
 
 const ASSETS = [
   './',
@@ -17,7 +17,8 @@ const ASSETS = [
   './icons/icon-180.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/icon-maskable-512.png'
+  './icons/icon-maskable-512.png',
+  './icons/xpfundo.jpg'
 ];
 
 self.addEventListener('install', (e) => {

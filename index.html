@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Draw Studio — Editor de Desenho</title>
 <meta name="description" content="Editor de desenho profissional com camadas, formas, texto e histórico — instalável e offline.">
-<meta name="theme-color" content="#12141c">
+<meta name="theme-color" content="#0054e3">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -16,7 +16,9 @@
 </head>
 <body>
 
-<header id="topbar">
+<div id="app">
+
+<header id="titlebar">
   <div class="brand">
     <svg viewBox="0 0 24 24" class="logo" aria-hidden="true">
       <path d="M12 20l-7-7 8.2-8.2a1.9 1.9 0 012.7 0l3.3 3.3a1.9 1.9 0 010 2.7L12 20z"/>
@@ -24,8 +26,16 @@
       <path d="M7 13l3 3"/>
     </svg>
     <span class="brand-name">Draw Studio</span>
+    <span class="doc-name">— sem título</span>
   </div>
+  <div class="winbtns" aria-hidden="true">
+    <span class="wb wb-min"></span>
+    <span class="wb wb-max"></span>
+    <span class="wb wb-close"></span>
+  </div>
+</header>
 
+<div id="topbar">
   <div class="sep" aria-hidden="true"></div>
 
   <div class="tb-group">
@@ -48,9 +58,8 @@
 
   <div class="spacer"></div>
 
-  <button class="tb primary" id="installBtn" hidden>Instalar app</button>
   <button class="tb panel-btn" id="panelBtn" title="Mostrar painel lateral">Painel</button>
-</header>
+</div>
 
 <main id="workspace">
 
@@ -239,6 +248,34 @@
   <span class="grow"></span>
   <span id="stHint"></span>
 </footer>
+
+</div>
+
+<div id="taskbar" aria-hidden="true">
+  <div class="startbtn">
+    <svg class="win-flag" viewBox="0 0 16 16" aria-hidden="true">
+      <g transform="rotate(-8 8 8)">
+        <rect x="1.2" y="2" width="5.6" height="5.6" rx="1.2" fill="#f65314"/>
+        <rect x="9.2" y="2" width="5.6" height="5.6" rx="1.2" fill="#7cbb00"/>
+        <rect x="1.2" y="8.4" width="5.6" height="5.6" rx="1.2" fill="#00a1f1"/>
+        <rect x="9.2" y="8.4" width="5.6" height="5.6" rx="1.2" fill="#ffbb00"/>
+      </g>
+    </svg>
+    <span>Iniciar</span>
+  </div>
+  <div class="task-item">
+    <svg class="win-flag" viewBox="0 0 16 16" aria-hidden="true">
+      <g transform="rotate(-8 8 8)">
+        <rect x="1.2" y="2" width="5.6" height="5.6" rx="1.2" fill="#f65314"/>
+        <rect x="9.2" y="2" width="5.6" height="5.6" rx="1.2" fill="#7cbb00"/>
+        <rect x="1.2" y="8.4" width="5.6" height="5.6" rx="1.2" fill="#00a1f1"/>
+        <rect x="9.2" y="8.4" width="5.6" height="5.6" rx="1.2" fill="#ffbb00"/>
+      </g>
+    </svg>
+    <span class="tlabel">Draw Studio</span>
+  </div>
+  <div class="tray"><span id="clock">--:--</span></div>
+</div>
 
 <div id="toasts"></div>
 
